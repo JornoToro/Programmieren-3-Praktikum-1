@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - cmain",
+            "request": "launch",
+            "mainClass": "car.cmain",
+            "projectName": "src_414d5e60"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - test",
+            "request": "launch",
+            "mainClass": "test",
+            "projectName": "src_414d5e60"
+        }
+    ]
+}
