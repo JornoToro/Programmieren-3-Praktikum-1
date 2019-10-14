@@ -157,6 +157,7 @@ public class LicenceAdministration {
                 int buildingYear = pair.getValue().getBuildingYear();
                 if (buildingYear < year) {
                     platesToCar.remove(pair.getKey());
+                    break;
                 }
             }
         }
@@ -172,7 +173,7 @@ public class LicenceAdministration {
      */
     public static String requireValidLicencePlate(String string) {
         // EH-HS 321
-        if (string != null && Pattern.matches("*-* *", string)) {
+        if (string != null && Pattern.matches("[A-Z][A-Z]-[A-Z][A-Z]\\s[1-9][1-9][1-9]", string)) {
             return string;
         } else {
             throw new IllegalArgumentException("no valid plate");
