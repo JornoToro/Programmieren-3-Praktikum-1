@@ -1,9 +1,17 @@
 package car;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
+import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 /**
  * Verwaltungssoftware zur Zuordnung von Autokennzeichen auf einen Besitzer.
@@ -20,6 +28,11 @@ public class LicenceAdministration {
      * @throw NullpointerException, falls entries null ist.
      */
     public void register(Map<String, Car> entries) {
+        if(entries.isEmpty()){
+            throw new NullPointerException("entries cannot be null");
+        }else{
+            platesToCar = entries;
+        }
     }
 
     /** Fuegt einen neuen Eintrag in die Autokennzeichenverwaltung ein.
@@ -29,6 +42,7 @@ public class LicenceAdministration {
      * @throw IllegalArgumentException, falls das Auto bereits registriert ist.
      */
     public void register(String licence, Car car) {
+
     }
 
     /** Liefert die Anzahl der Zulassungen.
@@ -36,18 +50,27 @@ public class LicenceAdministration {
      * @return Anzahl der Zulassungen.
      */
     public int size() {
+        return platesToCar.size();
     }
 
     /** Liefert eine unveraenderliche Sicht auf die Abbildung der Zulassungen.
      * @return unveraenderliche Sicht auf die Zulassungen.
      */
     Map<String, Car> getPlatesToCar() {
+        return platesToCar;
     }
 
     /** Liefert die unveraenderliche Menge aller Autokennzeichen.
      * @return die unveraenderliche Menge aller Autokennzeichen.
      */
     public Set<String> getLicencePlates() {
+        Set<String> allPlates = new HashSet<String>();
+    
+        for (String key : platesToCar.keySet()) {
+            allPlates.add(key);
+        }
+
+        return allPlates;
     }
 
     /** Liefert fuer einen Besitzer (owner) eine Liste aller Autokennzeichen.
@@ -55,6 +78,22 @@ public class LicenceAdministration {
      * @return Liste aller autokennzeichen eines Besitzer.
      */
     public List<String> getLicencesOfOwner(String owner) {
+        List<String> allLicences = new ArrayList<String>();
+
+        if(owner != null){
+            Iterator<Entry<String, Car>> it = platesToCar.entrySet().iterator();
+
+            while (it.hasNext()) {
+                Map.Entry<String, Car> pair = (Map.Entry<String, Car>) it.next();
+                if(pair.getValue() != null) {
+                    String currentOwner = pair.getValue().getOwner();
+                    if(currentOwner.equals(owner)){
+                        allLicences.add(pair.getKey());
+                    }
+                }
+            }
+        }
+        return allLicences;
     }
 
     /** Liefert eine sortierte Liste der Nummernschilder fuer Autos aelter als year.
@@ -62,12 +101,40 @@ public class LicenceAdministration {
      * @return sortierte Liste von Nummernschildern.
      */
     public List<String> getLicencesOlderThan(int beforeYear) {
+        List<String> olderCars = new ArrayList<String>();
+
+        if(beforeYear != 0){
+            Iterator<Entry<String, Car>> it = platesToCar.entrySet().iterator();
+
+            while (it.hasNext()) {
+                Map.Entry<String, Car> pair = (Map.Entry<String, Car>) it.next();
+                if(pair.getValue() != null) {
+                    int buildingYear = pair.getValue().getBuildingYear();
+                    if(buildingYear < beforeYear){
+                        olderCars.add(pair.getKey());
+                    }
+                }
+            }
+        }
+        Collections.sort(olderCars);
+        return olderCars;   
     }
 
     /** Verschrottet ein Auto, dessen Erstellungsjahr vor einem bestimmten Jahr liegt.
      * @param year ein Herstellungsjahr.
      */
     void keepLicenceNewerThan(int year) {
+        Iterator<Entry<String, Car>> it = platesToCar.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry<String, Car> pair = (Map.Entry<String, Car>) it.next();
+            if(pair.getValue() != null) {
+                int buildingYear = pair.getValue().getBuildingYear();
+                if(buildingYear < year){
+                    platesToCar.remove(pair.getKey());
+                }
+            }
+        }
     }
 
     /** Ueberprueft den String fuer ein Nummernschild auf einen korrekten Aufbau.
@@ -76,6 +143,12 @@ public class LicenceAdministration {
      * @throw IllegalArgumentException, falls das Nummernschild nicht den Regeln entspricht.
      */
     public static String requireValidLicencePlate(String string) {
+        //EH-HS 321
+        if(string != null && Pattern.matches("*-* *", string)){
+            return string;
+        }else{
+            throw new IllegalArgumentException("no valid plate");
+        }
     }
 
 }
