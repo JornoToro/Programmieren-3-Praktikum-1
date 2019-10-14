@@ -1,6 +1,5 @@
 package car;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
@@ -17,7 +15,6 @@ import java.util.regex.Pattern;
  * Verwaltungssoftware zur Zuordnung von Autokennzeichen auf einen Besitzer.
  * 
  * @author Gudrun Schiedermeier, gschied@haw-landshut.de
- * !TODO: Methoden Ausfüllen
  */
 public class LicenceAdministration {
     /** Bildet Autokennzeichen auf das zugehoerige Fahrzeug ab. */
@@ -42,7 +39,16 @@ public class LicenceAdministration {
      * @throw IllegalArgumentException, falls das Auto bereits registriert ist.
      */
     public void register(String licence, Car car) {
+        Iterator<Entry<String, Car>> iterator = platesToCar.entrySet().iterator();
 
+            while (iterator.hasNext()) {
+                 Map.Entry<String, Car> pair = (Map.Entry<String, Car>) iterator.next();
+                if(pair.getValue() != null && !(pair.getValue().equals(car))) {
+                    platesToCar.put(requireValidLicencePlate(licence), car);
+                }if (pair.getValue().equals(car)) {
+                    throw new IllegalArgumentException("car alread in");
+                }
+            }
     }
 
     /** Liefert die Anzahl der Zulassungen.
@@ -81,10 +87,10 @@ public class LicenceAdministration {
         List<String> allLicences = new ArrayList<String>();
 
         if(owner != null){
-            Iterator<Entry<String, Car>> it = platesToCar.entrySet().iterator();
+            Iterator<Entry<String, Car>> iterator = platesToCar.entrySet().iterator();
 
-            while (it.hasNext()) {
-                Map.Entry<String, Car> pair = (Map.Entry<String, Car>) it.next();
+            while (iterator.hasNext()) {
+                Map.Entry<String, Car> pair = (Map.Entry<String, Car>) iterator.next();
                 if(pair.getValue() != null) {
                     String currentOwner = pair.getValue().getOwner();
                     if(currentOwner.equals(owner)){
@@ -104,10 +110,10 @@ public class LicenceAdministration {
         List<String> olderCars = new ArrayList<String>();
 
         if(beforeYear != 0){
-            Iterator<Entry<String, Car>> it = platesToCar.entrySet().iterator();
+            Iterator<Entry<String, Car>> iterator = platesToCar.entrySet().iterator();
 
-            while (it.hasNext()) {
-                Map.Entry<String, Car> pair = (Map.Entry<String, Car>) it.next();
+            while (iterator.hasNext()) {
+                Map.Entry<String, Car> pair = (Map.Entry<String, Car>) iterator.next();
                 if(pair.getValue() != null) {
                     int buildingYear = pair.getValue().getBuildingYear();
                     if(buildingYear < beforeYear){
@@ -124,10 +130,10 @@ public class LicenceAdministration {
      * @param year ein Herstellungsjahr.
      */
     void keepLicenceNewerThan(int year) {
-        Iterator<Entry<String, Car>> it = platesToCar.entrySet().iterator();
+        Iterator<Entry<String, Car>> iterator = platesToCar.entrySet().iterator();
 
-        while (it.hasNext()) {
-            Map.Entry<String, Car> pair = (Map.Entry<String, Car>) it.next();
+        while (iterator.hasNext()) {
+            Map.Entry<String, Car> pair = (Map.Entry<String, Car>) iterator.next();
             if(pair.getValue() != null) {
                 int buildingYear = pair.getValue().getBuildingYear();
                 if(buildingYear < year){

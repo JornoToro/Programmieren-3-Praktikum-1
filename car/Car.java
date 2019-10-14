@@ -13,9 +13,6 @@ public class Car {
     /** Fruehestes gueltiges Zulassungsjahr. */
     private static final int EARLIEST_BUILDING_YEAR = 1950;
 
-    /** Default Year. */
-    private final int defaultYear = 2019;
-
     /** Eigentuemer eines Autos, nicht null, nicht leer. */
     private String owner;
 
@@ -99,8 +96,8 @@ public class Car {
 			return false;
 		}
 	
-        final Car c = (Car)obj;
-        return c.getOwner().equals(owner) && c.getMaker().equals(maker) && c.getBuildingYear() == buildingYear;
+        final Car carobj = (Car)obj;
+        return carobj.getOwner().equals(owner) && carobj.getMaker().equals(maker) && carobj.getBuildingYear() == buildingYear;
     }
 
     @Override
