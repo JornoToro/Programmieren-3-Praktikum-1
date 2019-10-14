@@ -20,38 +20,46 @@ public class LicenceAdministration {
     /** Bildet Autokennzeichen auf das zugehoerige Fahrzeug ab. */
     private Map<String, Car> platesToCar = new HashMap<>();
 
-    /** Kopiert eine gesamte andere Autokennzeichenverwaltung, alle Zulassungen.
+    /**
+     * Kopiert eine gesamte andere Autokennzeichenverwaltung, alle Zulassungen.
+     * 
      * @param entries Abbildung von Autokennzeichen auf Autos.
      * @throw NullpointerException, falls entries null ist.
      */
     public void register(Map<String, Car> entries) {
-        if(entries.isEmpty()){
+        if (entries.isEmpty()) {
             throw new NullPointerException("entries cannot be null");
-        }else{
+        } else {
             platesToCar = entries;
         }
     }
 
-    /** Fuegt einen neuen Eintrag in die Autokennzeichenverwaltung ein.
+    /**
+     * Fuegt einen neuen Eintrag in die Autokennzeichenverwaltung ein.
      *
      * @param licence ein gueltiges Autokennzeichen.
-     * @param car ein Auto.
+     * @param car     ein Auto.
      * @throw IllegalArgumentException, falls das Auto bereits registriert ist.
      */
     public void register(String licence, Car car) {
         Iterator<Entry<String, Car>> iterator = platesToCar.entrySet().iterator();
-
+        if (platesToCar.isEmpty()) {
+            platesToCar.put(licence, car);
+        } else {
             while (iterator.hasNext()) {
-                 Map.Entry<String, Car> pair = (Map.Entry<String, Car>) iterator.next();
-                if(pair.getValue() != null && !(pair.getValue().equals(car))) {
+                Map.Entry<String, Car> pair = (Map.Entry<String, Car>) iterator.next();
+                if (pair.getValue() != null && !(pair.getValue().equals(car))) {
                     platesToCar.put(requireValidLicencePlate(licence), car);
-                }if (pair.getValue().equals(car)) {
+                }
+                if (pair.getValue().equals(car)) {
                     throw new IllegalArgumentException("car alread in");
                 }
             }
+        }
     }
 
-    /** Liefert die Anzahl der Zulassungen.
+    /**
+     * Liefert die Anzahl der Zulassungen.
      *
      * @return Anzahl der Zulassungen.
      */
@@ -59,19 +67,23 @@ public class LicenceAdministration {
         return platesToCar.size();
     }
 
-    /** Liefert eine unveraenderliche Sicht auf die Abbildung der Zulassungen.
+    /**
+     * Liefert eine unveraenderliche Sicht auf die Abbildung der Zulassungen.
+     * 
      * @return unveraenderliche Sicht auf die Zulassungen.
      */
     Map<String, Car> getPlatesToCar() {
         return platesToCar;
     }
 
-    /** Liefert die unveraenderliche Menge aller Autokennzeichen.
+    /**
+     * Liefert die unveraenderliche Menge aller Autokennzeichen.
+     * 
      * @return die unveraenderliche Menge aller Autokennzeichen.
      */
     public Set<String> getLicencePlates() {
         Set<String> allPlates = new HashSet<String>();
-    
+
         for (String key : platesToCar.keySet()) {
             allPlates.add(key);
         }
@@ -79,21 +91,23 @@ public class LicenceAdministration {
         return allPlates;
     }
 
-    /** Liefert fuer einen Besitzer (owner) eine Liste aller Autokennzeichen.
+    /**
+     * Liefert fuer einen Besitzer (owner) eine Liste aller Autokennzeichen.
+     * 
      * @param owner der Besitzer eines Autos, nicht null, nicht leer.
      * @return Liste aller autokennzeichen eines Besitzer.
      */
     public List<String> getLicencesOfOwner(String owner) {
         List<String> allLicences = new ArrayList<String>();
 
-        if(owner != null){
+        if (owner != null) {
             Iterator<Entry<String, Car>> iterator = platesToCar.entrySet().iterator();
 
             while (iterator.hasNext()) {
                 Map.Entry<String, Car> pair = (Map.Entry<String, Car>) iterator.next();
-                if(pair.getValue() != null) {
+                if (pair.getValue() != null) {
                     String currentOwner = pair.getValue().getOwner();
-                    if(currentOwner.equals(owner)){
+                    if (currentOwner.equals(owner)) {
                         allLicences.add(pair.getKey());
                     }
                 }
@@ -102,31 +116,36 @@ public class LicenceAdministration {
         return allLicences;
     }
 
-    /** Liefert eine sortierte Liste der Nummernschilder fuer Autos aelter als year.
+    /**
+     * Liefert eine sortierte Liste der Nummernschilder fuer Autos aelter als year.
+     * 
      * @param beforeYear Jahresangabe.
      * @return sortierte Liste von Nummernschildern.
      */
     public List<String> getLicencesOlderThan(int beforeYear) {
         List<String> olderCars = new ArrayList<String>();
 
-        if(beforeYear != 0){
+        if (beforeYear != 0) {
             Iterator<Entry<String, Car>> iterator = platesToCar.entrySet().iterator();
 
             while (iterator.hasNext()) {
                 Map.Entry<String, Car> pair = (Map.Entry<String, Car>) iterator.next();
-                if(pair.getValue() != null) {
+                if (pair.getValue() != null) {
                     int buildingYear = pair.getValue().getBuildingYear();
-                    if(buildingYear < beforeYear){
+                    if (buildingYear < beforeYear) {
                         olderCars.add(pair.getKey());
                     }
                 }
             }
         }
         Collections.sort(olderCars);
-        return olderCars;   
+        return olderCars;
     }
 
-    /** Verschrottet ein Auto, dessen Erstellungsjahr vor einem bestimmten Jahr liegt.
+    /**
+     * Verschrottet ein Auto, dessen Erstellungsjahr vor einem bestimmten Jahr
+     * liegt.
+     * 
      * @param year ein Herstellungsjahr.
      */
     void keepLicenceNewerThan(int year) {
@@ -134,25 +153,28 @@ public class LicenceAdministration {
 
         while (iterator.hasNext()) {
             Map.Entry<String, Car> pair = (Map.Entry<String, Car>) iterator.next();
-            if(pair.getValue() != null) {
+            if (pair.getValue() != null) {
                 int buildingYear = pair.getValue().getBuildingYear();
-                if(buildingYear < year){
+                if (buildingYear < year) {
                     platesToCar.remove(pair.getKey());
                 }
             }
         }
     }
 
-    /** Ueberprueft den String fuer ein Nummernschild auf einen korrekten Aufbau.
+    /**
+     * Ueberprueft den String fuer ein Nummernschild auf einen korrekten Aufbau.
+     * 
      * @param string ein Nummernschild.
      * @return ein korrektes Nummernschild
-     * @throw IllegalArgumentException, falls das Nummernschild nicht den Regeln entspricht.
+     * @throw IllegalArgumentException, falls das Nummernschild nicht den Regeln
+     *        entspricht.
      */
     public static String requireValidLicencePlate(String string) {
-        //EH-HS 321
-        if(string != null && Pattern.matches("*-* *", string)){
+        // EH-HS 321
+        if (string != null && Pattern.matches("*-* *", string)) {
             return string;
-        }else{
+        } else {
             throw new IllegalArgumentException("no valid plate");
         }
     }

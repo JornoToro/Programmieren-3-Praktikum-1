@@ -28,9 +28,15 @@ public class LicenceAdministrationTest {
         LicenceAdministration administration = new LicenceAdministration();
         Map<String, Car> regCars = new HashMap<String, Car>();
         Car ein = new Car("Jonas",Maker.Audi,1995);
+        Car zwei = new Car("Peter",Maker.Audi,1994);
+
         regCars.put("EI-HS 192", ein);
+        regCars.put("EI-HS 111", zwei);
 
         administration.register(regCars);
+        
+        int size = administration.size();
+        assertEquals(2, size);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -39,5 +45,14 @@ public class LicenceAdministrationTest {
         Car ein = new Car("Jonas",Maker.Audi,1995);
         administration.register("EI-HS 192", ein);
         administration.register("EI-BS 172", ein);
+    }
+
+    @Test
+    public void ifSingleSuccess() {
+        LicenceAdministration administration = new LicenceAdministration();
+        Car ein = new Car("Jonas",Maker.Audi,1995);
+        administration.register("EI-HS 192", ein);
+        int size = administration.size();
+        assertEquals(1, size);
     }
 }

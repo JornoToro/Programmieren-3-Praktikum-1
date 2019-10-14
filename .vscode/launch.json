@@ -5,6 +5,13 @@
             "name": "CodeLens (Launch) - cmain",
             "request": "launch",
             "mainClass": "car.cmain",
+            "projectName": "Prog3Prak1_ddc6fb90"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - cmain",
+            "request": "launch",
+            "mainClass": "car.cmain",
             "projectName": "src_414d5e60"
         },
         {
