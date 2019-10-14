@@ -1,4 +1,4 @@
-package car;
+package src.car;
 
 /** Automarken.
  * @author Gudrun Schiedermeier, gschied@haw-landshut.de
