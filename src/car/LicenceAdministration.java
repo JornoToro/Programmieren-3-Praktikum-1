@@ -148,7 +148,7 @@ public class LicenceAdministration {
      * 
      * @param year ein Herstellungsjahr.
      */
-    void keepLicenceNewerThan(int year) {
+    public void keepLicenceNewerThan(int year) {
         Iterator<Entry<String, Car>> iterator = platesToCar.entrySet().iterator();
 
         while (iterator.hasNext()) {

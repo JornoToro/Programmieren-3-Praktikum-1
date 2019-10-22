@@ -1,5 +1,6 @@
-package src.car;
+package test;
 
+import src.car.*;
 import org.junit.Test;
 import java.util.ArrayList;
 import java.util.HashMap;
