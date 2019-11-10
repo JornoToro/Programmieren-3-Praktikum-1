@@ -73,7 +73,7 @@ public class LicenceAdministration {
      * @return unveraenderliche Sicht auf die Zulassungen.
      */
     Map<String, Car> getPlatesToCar() {
-        return platesToCar;
+        return Collections.unmodifiableMap(platesToCar);
     }
 
     /**
