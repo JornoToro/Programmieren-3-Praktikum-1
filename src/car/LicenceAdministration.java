@@ -42,12 +42,12 @@ public class LicenceAdministration {
      * @throw IllegalArgumentException, falls das Auto bereits registriert ist.
      */
     public void register(String licence, Car car) {
-        Iterator<Entry<String, Car>> iterator = platesToCar.entrySet().iterator();
+        final Iterator<Entry<String, Car>> iterator = platesToCar.entrySet().iterator();
         if (platesToCar.isEmpty()) {
             platesToCar.put(licence, car);
         } else {
             while (iterator.hasNext()) {
-                Map.Entry<String, Car> pair = (Map.Entry<String, Car>) iterator.next();
+                final Map.Entry<String, Car> pair = (Map.Entry<String, Car>) iterator.next();
                 if (pair.getValue() != null && !(pair.getValue().equals(car))) {
                     platesToCar.put(requireValidLicencePlate(licence), car);
                 }
@@ -82,7 +82,7 @@ public class LicenceAdministration {
      * @return die unveraenderliche Menge aller Autokennzeichen.
      */
     public Set<String> getLicencePlates() {
-        Set<String> allPlates = new HashSet<String>();
+        final Set<String> allPlates = new HashSet<String>();
 
         for (String key : platesToCar.keySet()) {
             allPlates.add(key);
@@ -98,15 +98,15 @@ public class LicenceAdministration {
      * @return Liste aller autokennzeichen eines Besitzer.
      */
     public List<String> getLicencesOfOwner(String owner) {
-        List<String> allLicences = new ArrayList<String>();
+        final List<String> allLicences = new ArrayList<String>();
 
         if (owner != null) {
-            Iterator<Entry<String, Car>> iterator = platesToCar.entrySet().iterator();
+            final Iterator<Entry<String, Car>> iterator = platesToCar.entrySet().iterator();
 
             while (iterator.hasNext()) {
-                Map.Entry<String, Car> pair = (Map.Entry<String, Car>) iterator.next();
+                final Map.Entry<String, Car> pair = (Map.Entry<String, Car>) iterator.next();
                 if (pair.getValue() != null) {
-                    String currentOwner = pair.getValue().getOwner();
+                    final String currentOwner = pair.getValue().getOwner();
                     if (currentOwner.equals(owner)) {
                         allLicences.add(pair.getKey());
                     }
@@ -123,15 +123,15 @@ public class LicenceAdministration {
      * @return sortierte Liste von Nummernschildern.
      */
     public List<String> getLicencesOlderThan(int beforeYear) {
-        List<String> olderCars = new ArrayList<String>();
+        final List<String> olderCars = new ArrayList<String>();
 
         if (beforeYear != 0) {
-            Iterator<Entry<String, Car>> iterator = platesToCar.entrySet().iterator();
+            final Iterator<Entry<String, Car>> iterator = platesToCar.entrySet().iterator();
 
             while (iterator.hasNext()) {
-                Map.Entry<String, Car> pair = (Map.Entry<String, Car>) iterator.next();
+                final Map.Entry<String, Car> pair = (Map.Entry<String, Car>) iterator.next();
                 if (pair.getValue() != null) {
-                    int buildingYear = pair.getValue().getBuildingYear();
+                    final int buildingYear = pair.getValue().getBuildingYear();
                     if (buildingYear < beforeYear) {
                         olderCars.add(pair.getKey());
                     }
@@ -149,12 +149,12 @@ public class LicenceAdministration {
      * @param year ein Herstellungsjahr.
      */
     public void keepLicenceNewerThan(int year) {
-        Iterator<Entry<String, Car>> iterator = platesToCar.entrySet().iterator();
+        final Iterator<Entry<String, Car>> iterator = platesToCar.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Map.Entry<String, Car> pair = (Map.Entry<String, Car>) iterator.next();
+            final Map.Entry<String, Car> pair = (Map.Entry<String, Car>) iterator.next();
             if (pair.getValue() != null) {
-                int buildingYear = pair.getValue().getBuildingYear();
+                final int buildingYear = pair.getValue().getBuildingYear();
                 if (buildingYear < year) {
                     platesToCar.remove(pair.getKey());
                     break;
