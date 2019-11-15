@@ -9,6 +9,7 @@ import java.util.Objects;
  * 
  * @author Gudrun Schiedermeier, gschied@haw-landshut.de
  */
+@SuppressWarnings("PMD.DataClass")
 public class Car {
     /** Fruehestes gueltiges Zulassungsjahr. */
     private static final int EARLIEST_BUILDING_YEAR = 1950;
